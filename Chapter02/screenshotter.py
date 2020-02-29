@@ -1,15 +1,13 @@
 from __future__ import print_function
 import argparse
-from multiprocessing import freeze_support
 import os
 import sys
 import time
 
 try:
     import pyscreenshot
-    import wx
 except ImportError:
-    print("[-] Install wx and pyscreenshot to use this script")
+    print("[-] Install pyscreenshot to use this script")
     sys.exit(1)
 
 """

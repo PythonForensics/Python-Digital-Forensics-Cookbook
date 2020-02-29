@@ -1,1 +1,2 @@
 pyscreenshot>=0.4.2
+pillow>=4.2.1

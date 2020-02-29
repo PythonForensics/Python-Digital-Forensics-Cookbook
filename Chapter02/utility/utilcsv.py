@@ -36,14 +36,15 @@ def csv_writer(data, header, output_directory, name=None):
     if name is None:
         name = "output.csv"
 
+    outfile = os.path.join(output_directory, name)
     if sys.version_info < (3, 0):
-        with open(os.path.join(output_directory, name), "wb") as csvfile:
+        with open(outfile, "wb") as csvfile:
             writer = csv.writer(csvfile)
             writer.writerow(header)
 
             writer.writerows(data)
     else:
-        with open(os.path.join(output_directory, name), "w", newline="") as csvfile:
+        with open(outfile, "w", newline="") as csvfile:
             writer = csv.writer(csvfile)
             writer.writerow(header)
 
