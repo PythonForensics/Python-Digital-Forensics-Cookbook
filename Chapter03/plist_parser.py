@@ -42,7 +42,7 @@ def main(plist):
     try:
         plist_data = biplist.readPlist(plist)
     except (biplist.InvalidPlistException,
-            biplist.NotBinaryPlistException) as e:
+            biplist.NotBinaryPlistException):
         print("[-] Invalid PLIST file - unable to be opened by biplist")
         sys.exit(2)
 

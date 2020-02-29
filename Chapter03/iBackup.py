@@ -159,7 +159,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "INPUT_DIR",
         help="Location of folder containing iOS backups, "
-        "e.g. ~\Library\Application Support\MobileSync\Backup folder"
+             r"e.g. ~\Library\Application Support\MobileSync\Backup folder"
     )
     parser.add_argument("OUTPUT_DIR", help="Output Directory")
     parser.add_argument("-l", help="Log file path",

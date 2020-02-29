@@ -70,8 +70,8 @@ def parse_xml(xml_file):
                         try:
                             value_text = value.text
                         except AttributeError:
-                            continue
-                        if "SSID" in value.text:
+                            value_text = ""
+                        if "SSID" in value_text:
                             bssid, ssid = value.text.split("\t")
                             bssid = bssid[7:]
                             ssid = ssid[6:]
@@ -132,8 +132,7 @@ def prep_output(output, data):
     google_map = "https://www.google.com/maps/search/"
     for x, mac in enumerate(data):
         for y, ts in enumerate(data[mac]["Timestamps"]):
-            for z, result in enumerate(data[mac]["Wigle"]["results"]):
-                shortres = data[mac]["Wigle"]["results"][z]
+            for z, shortres in enumerate(data[mac]["Wigle"]["results"]):
                 g_map_url = "{}{},{}".format(
                     google_map, shortres["trilat"], shortres["trilong"])
                 csv_data["{}-{}-{}".format(x, y, z)] = {
