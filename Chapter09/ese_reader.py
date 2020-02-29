@@ -1,3 +1,4 @@
+from __future__ import print_function
 from argparse import ArgumentParser
 import unicodecsv as csv
 import datetime
