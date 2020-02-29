@@ -36,7 +36,7 @@ __authors__ = ["Chapin Bryce", "Preston Miller"]
 __date__ = 20170815
 __description__ = "Read metadta from Office files"
 
-parser = argparse.ArgumentParser(
+parser = ArgumentParser(
     description=__description__,
     epilog="Developed by {} on {}".format(", ".join(__authors__), __date__)
 )

@@ -1,5 +1,4 @@
 from __future__ import print_function
-import os
 import pytsk3
 import sys
 import pyewf
@@ -38,7 +37,8 @@ class EWFImgInfo(pytsk3.Img_Info):
     """EWF Image Format helper class"""
     def __init__(self, ewf_handle):
         self._ewf_handle = ewf_handle
-        super(EWFImgInfo, self).__init__(url="", type=pytsk3.TSK_IMG_TYPE_EXTERNAL)
+        super(EWFImgInfo, self).__init__(
+            url="", type=pytsk3.TSK_IMG_TYPE_EXTERNAL)
 
     def close(self):
         self._ewf_handle.close()
@@ -119,20 +119,27 @@ class TSKUtil(object):
             self.vol = pytsk3.Volume_Info(self.image_handle)
         except IOError:
             _, e, _ = sys.exc_info()
-            sys.stderr.write("[-] Unable to read partition table. Possible logical image:\n {}\n".format(e))
+            sys.stderr.write(
+                "[-] Unable to read partition table. Possible "
+                "logical image:\n {}\n".format(e))
 
     def open_FS(self):
         # Open FS and Recurse
         if self.vol is not None:
             for partition in self.vol:
-                if partition.len > 2048 and "Unallocated" not in partition.desc and "Extended" not in partition.desc and "Primary Table" not in partition.desc:
+                if (partition.len > 2048 and
+                        "Unallocated" not in partition.desc and
+                        "Extended" not in partition.desc and
+                        "Primary Table" not in partition.desc):
                     try:
-                        self.fs.append(pytsk3.FS_Info(
-                            self.image_handle,
-                            offset=partition.start * self.vol.info.block_size))
+                        offset = partition.start*self.vol.info.block_size
+
+                        self.fs.append(
+                            pytsk3.FS_Info(self.image_handle, offset=offset))
                     except IOError:
                         _, e, _ = sys.exc_info()
-                        sys.stderr.write("[-] Unable to open FS:\n {}\n".format(e))
+                        sys.stderr.write(
+                            "[-] Unable to open FS:\n {}\n".format(e))
         else:
             try:
                 self.fs.append(pytsk3.FS_Info(self.image_handle))
@@ -143,7 +150,8 @@ class TSKUtil(object):
     def detect_ntfs(self, vol, partition):
         try:
             block_size = vol.info.block_size
-            fs_object = pytsk3.FS_Info(self.image_handle, offset=(partition.start * block_size))
+            fs_object = pytsk3.FS_Info(
+                self.image_handle, offset=(partition.start * block_size))
         except Exception:
             sys.stderr.write("[-] Unable to open FS\n")
             return False
@@ -159,7 +167,8 @@ class TSKUtil(object):
                 root_dir = fs.open_dir(path)
             except IOError:
                 continue
-            files += self.recurse_dirs(i, fs, root_dir, [], [], [""], substring, logic, case)
+            files += self.recurse_dirs(
+                i, fs, root_dir, [], [], [""], substring, logic, case)
 
         if files == []:
             return None
@@ -179,19 +188,23 @@ class TSKUtil(object):
         else:
             return dirs
 
-    def recurse_dirs(self, part, fs, root_dir, dirs, data, parent, substring, logic, case):
+    def recurse_dirs(self, part, fs, root_dir, dirs, data, parent,
+                     substring, logic, case):
         dirs.append(root_dir.info.fs_file.meta.addr)
         for fs_object in root_dir:
             # Skip ".", ".." or directory entries without a name.
-            if not hasattr(fs_object, "info") or not hasattr(fs_object.info, "name") or not hasattr(fs_object.info.name, "name") or fs_object.info.name.name in [".", ".."]:
+            if (not hasattr(fs_object, "info") or
+                    not hasattr(fs_object.info, "name") or
+                    not hasattr(fs_object.info.name, "name") or
+                    fs_object.info.name.name in [".", ".."]):
                 continue
             try:
                 file_name = fs_object.info.name.name
-                file_path = "{}/{}".format("/".join(parent), fs_object.info.name.name)
+                file_path = "{}/{}".format(
+                    "/".join(parent), fs_object.info.name.name)
                 try:
                     if fs_object.info.meta.type == pytsk3.TSK_FS_META_TYPE_DIR:
                         f_type = "DIR"
-                        file_ext = ""
                     else:
                         f_type = "FILE"
 
@@ -200,35 +213,45 @@ class TSKUtil(object):
 
                 if f_type == "FILE":
                     if logic.lower() == 'contains':
-                        if case is False:
+                        if not case:
                             if substring.lower() in file_name.lower():
-                                data.append((file_name, file_path, fs_object, part))
+                                data.append(
+                                    (file_name, file_path, fs_object, part))
                         else:
                             if substring in file_name:
-                                data.append((file_name, file_path, fs_object, part))
+                                data.append(
+                                    (file_name, file_path, fs_object, part))
                     elif logic.lower() == 'startswith':
-                        if case is False:
+                        if not case:
                             if file_name.lower().startswith(substring.lower()):
-                                data.append((file_name, file_path, fs_object, part))
+                                data.append(
+                                    (file_name, file_path, fs_object, part))
                         else:
                             if file_name.startswith(substring):
-                                data.append((file_name, file_path, fs_object, part))
+                                data.append(
+                                    (file_name, file_path, fs_object, part))
                     elif logic.lower() == 'endswith':
-                        if case is False:
+                        if not case:
                             if file_name.lower().endswith(substring.lower()):
-                                data.append((file_name, file_path, fs_object, part))
+                                data.append(
+                                    (file_name, file_path, fs_object, part))
                         else:
                             if file_name.endswith(substring):
-                                data.append((file_name, file_path, fs_object, part))
-                    elif logic.lower() == 'equal':
-                        if case is False:
+                                data.append(
+                                    (file_name, file_path, fs_object, part))
+                    elif logic.lower() in ('equal', 'equals'):
+                        if not case:
                             if substring.lower() == file_name.lower():
-                                data.append((file_name, file_path, fs_object, part))
+                                data.append(
+                                    (file_name, file_path, fs_object, part))
                         else:
                             if substring == file_name:
-                                data.append((file_name, file_path, fs_object, part))
+                                data.append(
+                                    (file_name, file_path, fs_object, part))
                     else:
-                        sys.stderr.write("[-] Warning invalid logic {} provided\n".format(logic))
+                        sys.stderr.write(
+                            "[-] Warning invalid logic {} provided\n".format(
+                                logic))
                         sys.exit()
 
                 elif f_type == "DIR":
@@ -239,7 +262,9 @@ class TSKUtil(object):
                     # This ensures that we don't recurse into a directory
                     # above the current level and thus avoid circular loops.
                     if inode not in dirs:
-                        self.recurse_dirs(part, fs, sub_directory, dirs, data, parent, substring, logic, case)
+                        self.recurse_dirs(
+                            part, fs, sub_directory, dirs, data, parent,
+                            substring, logic, case)
                     parent.pop(-1)
 
             except IOError:
@@ -264,11 +289,15 @@ def recurseFiles(count, fs, root_dir, dirs, data, parent):
     dirs.append(root_dir.info.fs_file.meta.addr)
     for fs_object in root_dir:
         # Skip ".", ".." or directory entries without a name.
-        if not hasattr(fs_object, "info") or not hasattr(fs_object.info, "name") or not hasattr(fs_object.info.name, "name") or fs_object.info.name.name in [".", ".."]:
+        if (not hasattr(fs_object, "info") or
+                not hasattr(fs_object.info, "name") or
+                not hasattr(fs_object.info.name, "name") or
+                fs_object.info.name.name in [".", ".."]):
             continue
         try:
             file_name = fs_object.info.name.name
-            file_path = "{}/{}".format("/".join(parent), fs_object.info.name.name)
+            file_path = "{}/{}".format(
+                "/".join(parent), fs_object.info.name.name)
             try:
                 if fs_object.info.meta.type == pytsk3.TSK_FS_META_TYPE_DIR:
                     f_type = "DIR"
@@ -286,7 +315,8 @@ def recurseFiles(count, fs, root_dir, dirs, data, parent):
             create = convertTime(fs_object.info.meta.crtime)
             change = convertTime(fs_object.info.meta.ctime)
             modify = convertTime(fs_object.info.meta.mtime)
-            data.append(["VSS {}".format(count), file_name, file_ext, f_type, create, change, modify, size, file_path])
+            data.append(["VSS {}".format(count), file_name, file_ext,
+                         f_type, create, change, modify, size, file_path])
 
             if f_type == "DIR":
                 parent.append(fs_object.info.name.name)

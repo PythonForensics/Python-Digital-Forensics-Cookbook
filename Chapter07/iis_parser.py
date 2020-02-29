@@ -68,7 +68,7 @@ def main(iis_log, report_file, logger):
         if line.startswith("#") or len(line) == 0:
             continue
         if '\"' in line:
-            line_iter = shlex.shlex(line_iter)
+            line_iter = shlex.shlex(line)
         else:
             line_iter = line.split(" ")
         for count, split_entry in enumerate(line_iter):

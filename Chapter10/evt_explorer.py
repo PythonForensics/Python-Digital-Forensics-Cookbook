@@ -2,8 +2,6 @@ from __future__ import print_function
 import argparse
 import unicodecsv as csv
 import os
-import pytsk3
-import pyewf
 import pyevt
 import pyevtx
 import sys

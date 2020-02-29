@@ -61,7 +61,7 @@ def main(image, img_type, part_type):
     if img_type == "ewf":
         try:
             filenames = pyewf.glob(image)
-        except IOError:
+        except IOError as e:
             print("[-] Invalid EWF format:\n {}".format(e))
             sys.exit(2)
 

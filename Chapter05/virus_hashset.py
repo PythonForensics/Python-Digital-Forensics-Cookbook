@@ -47,7 +47,7 @@ def main(hashset, **kwargs):
 
     try:
         index = urlopen(url, context=context).read().decode("utf-8")
-    except urllib.error.HTTPError as e:
+    except urllib.error.HTTPError:
         print("[-] Error accessing webpage - exiting..")
         sys.exit(1)
     tag = index.rfind(r'<a href="hashes/VirusShare_')
@@ -75,7 +75,7 @@ def main(hashset, **kwargs):
             hashes = urlopen(
                 url_hash, context=context).read().decode("utf-8")
             hashes_list = hashes.split("\n")
-        except urllib.error.HTTPError as e:
+        except urllib.error.HTTPError:
             print("[-] Error accessing webpage for hash list {}"
                   " - continuing..".format(x))
             continue

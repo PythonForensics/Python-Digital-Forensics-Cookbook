@@ -129,8 +129,8 @@ class DailyOutArtifact(Artifact):
     def CreateFragments(self):
         self.AddFragment('Snapshot Date - LocalTime (yyyy-mm-dd)',
                          Category.DateTimeLocal, FragmentType.DateTime)
-        self.AddFragment('Snapshot Timezone', Category.None,
-                         FragmentType.String)
+        self.AddFragment('Snapshot Timezone',
+                         Category.None, FragmentType.String)
         self.AddFragment('Volume Name',
                          Category.None, FragmentType.String)
         self.AddFragment('Filesystem Mount',
@@ -171,5 +171,6 @@ class DailyOutHunter(Hunter):
 
         if temp_daily_out is not None:
             temp_daily_out.close()
+
 
 RegisterArtifact(DailyOutArtifact())

@@ -64,7 +64,7 @@ if exif_data is None:
 
 for name, value in exif_data.items():
     gps_tag = TAGS.get(name, name)
-    if gps_tag is not 'GPSInfo':
+    if gps_tag != 'GPSInfo':
         continue
 
     lat_ref = value[1] == u'N'

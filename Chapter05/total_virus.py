@@ -2,7 +2,6 @@ from __future__ import print_function
 import argparse
 import csv
 import hashlib
-import json
 import os
 import requests
 import sys

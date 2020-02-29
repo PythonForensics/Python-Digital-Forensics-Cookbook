@@ -1,9 +1,6 @@
 from __future__ import print_function
 import argparse
-from datetime import datetime, timedelta
 import os
-import pytsk3
-import pyewf
 import pymsiecf
 import sys
 import unicodecsv as csv
@@ -105,7 +102,7 @@ def main(evidence, image_type, path):
             sys.exit(3)
 
     else:
-        print("[-] Directory {} not found".format(win_event))
+        print("[-] Directory {} not found".format(index_dir))
         sys.exit(2)
 
 

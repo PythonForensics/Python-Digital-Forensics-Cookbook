@@ -211,7 +211,8 @@ if __name__ == '__main__':
     if not os.path.exists(directory) and directory != "":
         os.makedirs(directory)
 
-    if os.path.exists(args.EVIDENCE_FILE) and os.path.isfile(args.EVIDENCE_FILE):
+    if (os.path.exists(args.EVIDENCE_FILE) and
+            os.path.isfile(args.EVIDENCE_FILE)):
         main(args.EVIDENCE_FILE, args.TYPE, args.OUTPUT_CSV, args.p)
     else:
         print("[-] Supplied input file {} does not exist or is not a "

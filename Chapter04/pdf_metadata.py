@@ -57,7 +57,7 @@ def custom_print(fmt_str, value):
         print(fmt_str.format(", ".join(value)))
     elif isinstance(value, dict):
         fmt_value = [":".join((k, v)) for k, v in value.items()]
-        print(fmt_str.format(", ".join(value)))
+        print(fmt_str.format(", ".join(fmt_value)))
     elif isinstance(value, str) or isinstance(value, bool):
         print(fmt_str.format(value))
     elif isinstance(value, bytes):

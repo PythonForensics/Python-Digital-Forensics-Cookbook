@@ -73,7 +73,7 @@ def process_message(msg):
 
 def process_headers(header):
     # Read and process header information
-    key_pattern = re.compile("^([A-Za-z\-]+:)(.*)$")
+    key_pattern = re.compile(r"^([A-Za-z\-]+:)(.*)$")
     header_data = {}
     for line in header.split("\r\n"):
         if len(line) == 0:

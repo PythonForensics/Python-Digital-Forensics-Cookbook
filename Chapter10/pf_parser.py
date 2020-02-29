@@ -2,8 +2,6 @@ from __future__ import print_function
 import argparse
 from datetime import datetime, timedelta
 import os
-import pytsk3
-import pyewf
 import struct
 import sys
 import unicodecsv as csv

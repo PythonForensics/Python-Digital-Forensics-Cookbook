@@ -1,7 +1,6 @@
 from __future__ import print_function
 import argparse
 from bs4 import BeautifulSoup, SoupStrainer
-from datetime import datetime
 import hashlib
 import logging
 import os
@@ -59,7 +58,7 @@ def main(website, output_dir):
 
     try:
         index = urlopen(website, context=context).read().decode("utf-8")
-    except urllib.error.HTTPError as e:
+    except urllib.error.HTTPError:
         logger.error(
             "Exiting preservation - unable to access page: {}".format(
                 website))
@@ -96,7 +95,7 @@ def recurse_pages(website, queue, context, output_dir):
             try:
                 page = urlopen(link, context=context).read().decode(
                     "utf-8")
-            except urllib.error.HTTPError as e:
+            except urllib.error.HTTPError:
                 msg = "Error accessing webpage: {}".format(link)
                 logger.error(msg)
                 continue

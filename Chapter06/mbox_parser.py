@@ -44,7 +44,7 @@ def custom_reader(data_stream):
     data = data_stream.read()
     try:
         content = data.decode("ascii")
-    except (UnicodeDecodeError, UnicodeEncodeError) as e:
+    except (UnicodeDecodeError, UnicodeEncodeError):
         content = data.decode("cp1252", errors="replace")
     return mailbox.mboxMessage(content)
 

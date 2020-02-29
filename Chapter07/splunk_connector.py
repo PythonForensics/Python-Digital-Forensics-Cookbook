@@ -94,7 +94,7 @@ class Spelunking(object):
 
         if not job_obj.is_ready():
             print("Job SID {} is still processing. "
-                  "Please wait to re-run".format(self.sir))
+                  "Please wait to re-run".format(self.sid))
 
         export_data = []
         job_results = job_obj.results(rf=self.cols)
@@ -159,31 +159,26 @@ if __name__ == '__main__':
 
     if spelunking.action == 'index':
         if 'file' not in vars(args):
-            ArgumentError('--file parameter required')
-            sys.exit()
+            raise ArgumentError(args.file, '--file parameter required')
         else:
             spelunking.file = os.path.abspath(args.file)
 
     elif spelunking.action == 'export':
         if 'file' not in vars(args):
-            ArgumentError('--file parameter required')
-            sys.exit()
+            raise ArgumentError(args.file, '--file parameter required')
         if 'query' not in vars(args):
-            ArgumentError('--query parameter required')
-            sys.exit()
+            raise ArgumentError(args.query, '--query parameter required')
         spelunking.file = os.path.abspath(args.file)
         spelunking.sid = args.query
 
     elif spelunking.action == 'query':
         if 'query' not in vars(args):
-            ArgumentError('--query parameter required')
-            sys.exit()
+            raise ArgumentError(args.query, '--query parameter required')
         else:
             spelunking.query = "search index={} {}".format(args.index_name,
                                                            args.query)
 
     else:
-        ArgumentError('Unknown action required')
-        sys.exit()
+        raise ArgumentError(args.action, 'Unknown action required')
 
     spelunking.run()
