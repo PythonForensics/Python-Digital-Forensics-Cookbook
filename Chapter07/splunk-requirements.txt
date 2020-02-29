@@ -1,0 +1,2 @@
+# Python 2 only
+splunk-sdk>=1.6.2
